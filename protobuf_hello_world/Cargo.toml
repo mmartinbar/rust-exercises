@@ -1,0 +1,8 @@
+[package]
+name = "protobuf_hello_world"
+version = "0.1.0"
+authors = ["mmartinbar <maria@stampery.co>"]
+
+[dependencies]
+protobuf = "2.0.4"
+protoc-rust = "2.0.4"
