@@ -1,2 +1,2 @@
 # rust-exercises
-Compilation of solutions to Rust exercises
+Compilation of solutions to Rust exercises, Rust small POCs...
