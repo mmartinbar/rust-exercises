@@ -93,11 +93,12 @@ pub fn enum_name_color(e: Color) -> &'static str {
 pub enum Equipment {
   NONE = 0,
   Weapon = 1,
+  Flower = 2,
 
 }
 
 const ENUM_MIN_EQUIPMENT: u8 = 0;
-const ENUM_MAX_EQUIPMENT: u8 = 1;
+const ENUM_MAX_EQUIPMENT: u8 = 2;
 
 impl<'a> flatbuffers::Follow<'a> for Equipment {
   type Inner = Self;
@@ -131,15 +132,17 @@ impl flatbuffers::Push for Equipment {
 }
 
 #[allow(non_camel_case_types)]
-const ENUM_VALUES_EQUIPMENT:[Equipment; 2] = [
+const ENUM_VALUES_EQUIPMENT:[Equipment; 3] = [
   Equipment::NONE,
-  Equipment::Weapon
+  Equipment::Weapon,
+  Equipment::Flower
 ];
 
 #[allow(non_camel_case_types)]
-const ENUM_NAMES_EQUIPMENT:[&'static str; 2] = [
+const ENUM_NAMES_EQUIPMENT:[&'static str; 3] = [
     "NONE",
-    "Weapon"
+    "Weapon",
+    "Flower"
 ];
 
 pub fn enum_name_equipment(e: Equipment) -> &'static str {
@@ -312,6 +315,16 @@ impl<'a> Monster<'a> {
   pub fn equipped_as_weapon(&'a self) -> Option<Weapon> {
     if self.equipped_type() == Equipment::Weapon {
       self.equipped().map(|u| Weapon::init_from_table(u))
+    } else {
+      None
+    }
+  }
+
+  #[inline]
+  #[allow(non_snake_case)]
+  pub fn equipped_as_flower(&'a self) -> Option<Flower> {
+    if self.equipped_type() == Equipment::Flower {
+      self.equipped().map(|u| Flower::init_from_table(u))
     } else {
       None
     }
@@ -491,6 +504,94 @@ impl<'a: 'b, 'b> WeaponBuilder<'a, 'b> {
   }
   #[inline]
   pub fn finish(self) -> flatbuffers::WIPOffset<Weapon<'a>> {
+    let o = self.fbb_.end_table(self.start_);
+    flatbuffers::WIPOffset::new(o.value())
+  }
+}
+
+pub enum FlowerOffset {}
+#[derive(Copy, Clone, Debug, PartialEq)]
+
+pub struct Flower<'a> {
+  pub _tab: flatbuffers::Table<'a>,
+}
+
+impl<'a> flatbuffers::Follow<'a> for Flower<'a> {
+    type Inner = Flower<'a>;
+    #[inline]
+    fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+        Self {
+            _tab: flatbuffers::Table { buf: buf, loc: loc },
+        }
+    }
+}
+
+impl<'a> Flower<'a> {
+    #[inline]
+    pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+        Flower {
+            _tab: table,
+        }
+    }
+    #[allow(unused_mut)]
+    pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+        _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+        args: &'args FlowerArgs<'args>) -> flatbuffers::WIPOffset<Flower<'bldr>> {
+      let mut builder = FlowerBuilder::new(_fbb);
+      if let Some(x) = args.name { builder.add_name(x); }
+      builder.add_petals(args.petals);
+      builder.finish()
+    }
+
+    pub const VT_NAME: flatbuffers::VOffsetT = 4;
+    pub const VT_PETALS: flatbuffers::VOffsetT = 6;
+
+  #[inline]
+  pub fn name(&'a self) -> Option<&'a str> {
+    self._tab.get::<flatbuffers::ForwardsUOffset<&str>>(Flower::VT_NAME, None)
+  }
+  #[inline]
+  pub fn petals(&'a self) -> i16 {
+    self._tab.get::<i16>(Flower::VT_PETALS, Some(13)).unwrap()
+  }
+}
+
+pub struct FlowerArgs<'a> {
+    pub name: Option<flatbuffers::WIPOffset<&'a  str>>,
+    pub petals: i16,
+}
+impl<'a> Default for FlowerArgs<'a> {
+    #[inline]
+    fn default() -> Self {
+        FlowerArgs {
+            name: None,
+            petals: 13,
+        }
+    }
+}
+pub struct FlowerBuilder<'a: 'b, 'b> {
+  fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+  start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+}
+impl<'a: 'b, 'b> FlowerBuilder<'a, 'b> {
+  #[inline]
+  pub fn add_name(&mut self, name: flatbuffers::WIPOffset<&'b  str>) {
+    self.fbb_.push_slot_always::<flatbuffers::WIPOffset<_>>(Flower::VT_NAME, name);
+  }
+  #[inline]
+  pub fn add_petals(&mut self, petals: i16) {
+    self.fbb_.push_slot::<i16>(Flower::VT_PETALS, petals, 13);
+  }
+  #[inline]
+  pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> FlowerBuilder<'a, 'b> {
+    let start = _fbb.start_table();
+    FlowerBuilder {
+      fbb_: _fbb,
+      start_: start,
+    }
+  }
+  #[inline]
+  pub fn finish(self) -> flatbuffers::WIPOffset<Flower<'a>> {
     let o = self.fbb_.end_table(self.start_);
     flatbuffers::WIPOffset::new(o.value())
   }

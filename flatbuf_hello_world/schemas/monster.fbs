@@ -1,7 +1,7 @@
 // Example IDL file for our monster's schema.
 namespace MyGame.Sample;
 enum Color:byte { Red = 0, Green, Blue = 2 }
-union Equipment { Weapon } // Optionally add more tables.
+union Equipment { Weapon, Flower } // Optionally add more tables.
 struct Vec3 {
   x:float;
   y:float;
@@ -22,5 +22,9 @@ table Monster {
 table Weapon {
   name:string;
   damage:short;
+}
+table Flower {
+    name:string;
+    petals:short = 13;
 }
 root_type Monster;
