@@ -1,0 +1,17 @@
+namespace Handshake;
+
+struct Version {
+    major:ubyte;
+    minor:ubyte;
+}
+
+table PingMessage {
+    version:Version;
+    timestamp:ulong;
+    message:string;
+}
+
+table PongMessage {
+    version:Version;
+    timestamp:ulong;
+}
