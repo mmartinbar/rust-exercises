@@ -5,10 +5,8 @@ use std::process::Command;
 use std::env;
 use std::path::Path;
 
-use bindgen::Builder;
-
 fn main() {
-    // Path to flatcc libraries
+    // Path to flatcc static libraries
     println!("cargo:rustc-link-search=third_party/dvidelabs_flatcc/lib/");
     println!("cargo:rustc-link-lib=static=flatccrt_d");
 
@@ -24,11 +22,8 @@ fn main() {
     // Generate flatbuffers C code
     build_flatbuf_c_from_schema();
 
-    cc::Build::new()
-        .file("src/messages_in_c/handshake_verifier.c")
-        .include("src/messages_in_c/")
-        .include("third_party/dvidelabs_flatcc/include/")
-        .compile("libhandshake.a");
+    // Build verifier library to be used in rust
+    build_verifier_lib();
 
     // Generate bindings for flatbuffers C code
     generate_c_bindings();
@@ -109,14 +104,27 @@ fn build_flatbuf_c_from_schema() {
     println!("* Compiling flatbuffer schemas to C code... [DONE]");
 }
 
+fn build_verifier_lib() {
+    println!("* Generating ping verifier library...");
+
+    cc::Build::new()
+        .file("src/messages_in_c/ping_verifier.c")
+        .include("third_party/dvidelabs_flatcc/include/")
+        .compile("libping.a");
+
+    println!("* Generating verifier library... [DONE]");
+}
+
 fn generate_c_bindings() {
     println!("* Generating C bindings...");
 
     // Get bindings to verifier header files
-    let bindings = Builder::default()
+    let bindings = bindgen::Builder::default()
         // The input header we would like to generate
         // bindings for.
-        .header("src/messages_in_c/handshake_verifier.h")
+        .header("src/messages_in_c/ping_verifier.h")
+        // add headers path
+        .clang_arg("-Ithird_party/dvidelabs_flatcc/include/")
         // Finish the builder and generate the bindings.
         .generate()
         // Unwrap the Result and panic on failure.

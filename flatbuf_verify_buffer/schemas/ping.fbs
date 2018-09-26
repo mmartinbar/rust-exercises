@@ -11,7 +11,4 @@ table PingMessage {
     message:string;
 }
 
-table PongMessage {
-    version:Version;
-    timestamp:ulong;
-}
+root_type PingMessage;

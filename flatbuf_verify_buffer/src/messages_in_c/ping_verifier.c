@@ -1,4 +1,4 @@
-#include "handshake_verifier.h"
+#include "ping_verifier.h"
 
 int Ext_Handshake_PingMessage_verify_as_root(const void *buf, size_t bufsiz)
 {
