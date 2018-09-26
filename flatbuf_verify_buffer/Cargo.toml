@@ -1,0 +1,12 @@
+[package]
+name = "flatbuf_verify_buffer"
+version = "0.1.0"
+authors = ["mmartinbar <maria@stampery.co>"]
+build = "build.rs"
+
+[dependencies]
+flatbuffers = "0.4.0"
+
+[build-dependencies]
+bindgen = "0.40.0"
+cc = "1.0.25"
