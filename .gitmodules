@@ -1,9 +1,9 @@
-[submodule "flatbuf_ping_pong/third_party/google_flatbuffers"]
-	path = flatbuf_ping_pong/third_party/google_flatbuffers
-	url = https://github.com/google/flatbuffers.git
 [submodule "flatbuf_verify_buffer/third_party/google_flatbuffers"]
 	path = flatbuf_verify_buffer/third_party/google_flatbuffers
 	url = https://github.com/google/flatbuffers.git
 [submodule "flatbuf_verify_buffer/third_party/dvidelabs_flatcc"]
 	path = flatbuf_verify_buffer/third_party/dvidelabs_flatcc
 	url = https://github.com/dvidelabs/flatcc.git
+[submodule "flatbuf_build_flatc/third_party/google_flatbuffers"]
+	path = flatbuf_build_flatc/third_party/google_flatbuffers
+	url = https://github.com/google/flatbuffers.git
