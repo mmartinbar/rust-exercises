@@ -1,0 +1,9 @@
+[package]
+name = "basic_tcp_server_client"
+version = "0.1.0"
+authors = ["mmartinbar <maria@stampery.co>"]
+edition = "2018"
+
+[dependencies]
+threadpool = "1.0"
+itertools = "0.7.8"
